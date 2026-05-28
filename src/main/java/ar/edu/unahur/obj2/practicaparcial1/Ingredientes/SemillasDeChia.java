@@ -1,9 +1,9 @@
 package ar.edu.unahur.obj2.practicaparcial1.Ingredientes;
 
-import ar.edu.unahur.obj2.practicaparcial1.Receta.Receta;
+import ar.edu.unahur.obj2.practicaparcial1.Receta.IReceta;
 
 public class SemillasDeChia extends IngredienteDecorator {
-    public SemillasDeChia(Receta recetaEnvuelta) {
+    public SemillasDeChia(IReceta recetaEnvuelta) {
         super(recetaEnvuelta);
     }
 

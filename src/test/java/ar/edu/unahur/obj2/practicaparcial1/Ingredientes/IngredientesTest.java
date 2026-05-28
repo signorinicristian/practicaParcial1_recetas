@@ -35,12 +35,12 @@ public class IngredientesTest {
     @Test
     void semillasDeChiaDeberiaAumentarElValorNutricionalYConservarElRestoDeLosDatos() {
         Receta recetaBase = new Receta("Ensalada", "Pepe", 120, 5);
-        SemillasDeChia ingrediente = new SemillasDeChia(recetaBase);
+        RodajasDePalta ingrediente = new RodajasDePalta(new SemillasDeChia(recetaBase));
 
         assertEquals("Ensalada", ingrediente.getNombre());
         assertEquals("Pepe", ingrediente.getAutor());
         assertEquals(5, ingrediente.getAñosDeTradicion());
-        assertEquals(610, ingrediente.getValorNutricionalBase());
+        assertEquals(770, ingrediente.getValorNutricionalBase());
         assertEquals(false, ingrediente.esTradicional());
     }
 }

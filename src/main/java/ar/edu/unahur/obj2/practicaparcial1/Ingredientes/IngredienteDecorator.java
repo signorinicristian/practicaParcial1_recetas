@@ -1,13 +1,12 @@
 package ar.edu.unahur.obj2.practicaparcial1.Ingredientes;
 
 import ar.edu.unahur.obj2.practicaparcial1.Receta.IReceta;
-import ar.edu.unahur.obj2.practicaparcial1.Receta.Receta;
 
 public abstract class IngredienteDecorator implements IReceta {
     protected IReceta recetaEnvuelta;
 
 
-    public IngredienteDecorator(Receta recetaEnvuelta) {
+    public IngredienteDecorator(IReceta recetaEnvuelta) {
         this.recetaEnvuelta = recetaEnvuelta;
     }
 

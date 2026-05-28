@@ -1,9 +1,9 @@
 package ar.edu.unahur.obj2.practicaparcial1.Ingredientes;
 
-import ar.edu.unahur.obj2.practicaparcial1.Receta.Receta;
+import ar.edu.unahur.obj2.practicaparcial1.Receta.IReceta;
 
 public class RodajasDePalta extends IngredienteDecorator {
-    public RodajasDePalta(Receta recetaEnvuelta) {
+    public RodajasDePalta(IReceta recetaEnvuelta) {
         super(recetaEnvuelta);
     }
 

@@ -1,10 +1,10 @@
 package ar.edu.unahur.obj2.practicaparcial1.Ingredientes;
 
-import ar.edu.unahur.obj2.practicaparcial1.Receta.Receta;
+import ar.edu.unahur.obj2.practicaparcial1.Receta.IReceta;
 
 public class FrutosSecos extends IngredienteDecorator {
 
-    public FrutosSecos(Receta recetaEnvuelta) {
+    public FrutosSecos(IReceta recetaEnvuelta) {
         super(recetaEnvuelta);
     }
 

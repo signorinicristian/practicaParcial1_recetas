@@ -1,39 +1,46 @@
 package ar.edu.unahur.obj2.practicaparcial1.Nutricionista;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import ar.edu.unahur.obj2.practicaparcial1.Clientes.Cliente;
 import ar.edu.unahur.obj2.practicaparcial1.Receta.Receta;
 
 public class Nutricionista {
-    private static final Nutricionista INSTANCE = new Nutricionista();
-    private String nombre; 
-    private List<Receta> recetasDisponibles = new ArrayList<>();
+    private static Nutricionista instancia;
+    private final String nombre = "Pepe";
 
-    private Nutricionista() {}
+    private final Set<Receta> recetasDisponibles;
 
-    public static Nutricionista getInstance() {
-        return INSTANCE;
+    private Nutricionista() {
+        this.recetasDisponibles = new HashSet<>();
     }
 
-    public void agregarReceta(Receta unaReceta) {
-        recetasDisponibles.add(unaReceta);
-    }
-
-    public Receta visitarAUnCliente(Cliente unCliente) {
-        Receta receta = unCliente.getRecetasRecibidas().stream()
-        .filter(r -> r.esAdecuada(r, unCliente))
-        .findFirst()
-        .orElseGet(() -> new Receta("batido mágico", nombre, 2000, 0));
-        return receta;
+    public Set<Receta> getRecetasDisponibles() {
+        return recetasDisponibles;
     }
 
     public String getNombre() {
         return nombre;
     }
 
-    public List<Receta> getRecetasDisponibles() {
-        return recetasDisponibles;
-    } 
+    public void agregarReceta(Receta unaReceta) {
+        recetasDisponibles.add(unaReceta);
+    }
+
+    public static Nutricionista getInstance() {
+        if (instancia == null) {
+            instancia = new Nutricionista();
+        }
+        return instancia;
+    }
+
+    public Receta visitarCliente(Cliente unCliente) {
+        Receta receta = unCliente.getRecetasRecibidas().stream()
+        .filter(r -> unCliente.getCriterio().leGusta(r))
+        .findFirst()
+        .orElseGet(() -> new Receta("batido mágico", nombre, 2000, 0));
+        return receta;
+    }
+
 }

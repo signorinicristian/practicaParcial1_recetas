@@ -1,57 +1,68 @@
 package ar.edu.unahur.obj2.practicaparcial1.Nutricionista;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.lang.reflect.Field;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import ar.edu.unahur.obj2.practicaparcial1.Clientes.Cliente;
-import ar.edu.unahur.obj2.practicaparcial1.CriteriosDeReceta.ICriterioDeReceta;
+import ar.edu.unahur.obj2.practicaparcial1.CriteriosDeReceta.AltoValorNutricional;
 import ar.edu.unahur.obj2.practicaparcial1.Receta.Receta;
 
 public class NutricionistaTest {
 
-    private Nutricionista n;
-
     @BeforeEach
-    public void setup() {
-        n = Nutricionista.getInstance();
-        // limpiar recetas disponibles antes de cada test
-        n.getRecetasDisponibles().clear();
+    void resetSingleton() throws Exception {
+        Field instancia = Nutricionista.class.getDeclaredField("instancia");
+        instancia.setAccessible(true);
+        instancia.set(null, null);
     }
 
     @Test
-    public void singletonEsMismoObjeto() {
-        Nutricionista n2 = Nutricionista.getInstance();
-        assertSame(n, n2);
+    void deberiaRetornarSiempreLaMismaInstancia() {
+        Nutricionista primeraInstancia = Nutricionista.getInstance();
+        Nutricionista segundaInstancia = Nutricionista.getInstance();
+
+        assertSame(primeraInstancia, segundaInstancia);
     }
 
     @Test
-    public void agregarRecetaYListaDisponible() {
-        Receta r = new Receta("X", "A", 100, 0);
-        n.agregarReceta(r);
-        assertTrue(n.getRecetasDisponibles().contains(r));
+    void deberiaCompartirElEstadoDeLaInstanciaSingleton() {
+        Nutricionista nutricionista = Nutricionista.getInstance();
+        Receta receta = new Receta("Ensalada", "Pepe", 120, 5);
+
+        nutricionista.agregarReceta(receta);
+
+        Nutricionista mismaInstancia = Nutricionista.getInstance();
+
+        assertSame(nutricionista, mismaInstancia);
+        assertEquals(1, mismaInstancia.getRecetasDisponibles().size());
+        assertTrue(mismaInstancia.getRecetasDisponibles().contains(receta));
     }
 
     @Test
-    public void visitarClienteEncuentraRecetaDelCliente() {
-        // criterio que acepta solo la receta llamada "Aceptada"
-        ICriterioDeReceta criterio = rec -> "Aceptada".equals(rec.getNombre());
-        Cliente c = new Cliente(11, criterio);
-        Receta buena = new Receta("Aceptada", "P", 1000, 0);
-        Receta mala = new Receta("Otra", "Q", 100, 0);
-        c.recibirReceta(mala);
-        c.recibirReceta(buena);
-
-        Receta encontrada = n.visitarAUnCliente(c);
-        assertEquals("Aceptada", encontrada.getNombre());
+    void deberiaTenerElNombreDelNutricionista() {
+        assertEquals("Pepe", Nutricionista.getInstance().getNombre());
     }
 
     @Test
-    public void visitarClienteGeneraRecetaDeEmergenciaSiNoHay() {
-        ICriterioDeReceta criterio = rec -> false;
-        Cliente c = new Cliente(22, criterio);
-        Receta resultado = n.visitarAUnCliente(c);
-        assertEquals("batido mágico", resultado.getNombre());
+    void deberiaDevolverLaRecetaAdecuadaDelCliente() {
+        Nutricionista nutricionista = Nutricionista.getInstance();
+        Cliente cliente = new Cliente(123, new AltoValorNutricional(100));
+        Receta recetaAdecuada = new Receta("Ensalada", "Pepe", 120, 5);
+
+        cliente.recibirReceta(recetaAdecuada);
+
+        Receta recetaSeleccionada = nutricionista.visitarCliente(cliente);
+
+        assertSame(recetaAdecuada, recetaSeleccionada);
+        assertEquals("Ensalada", recetaSeleccionada.getNombre());
+        assertEquals("Pepe", recetaSeleccionada.getAutor());
+        assertEquals(120, recetaSeleccionada.getValorNutricionalBase());
+        assertEquals(5, recetaSeleccionada.getAñosDeTradicion());
     }
 }

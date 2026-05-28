@@ -1,23 +1,28 @@
 package ar.edu.unahur.obj2.practicaparcial1.Receta;
 
-import ar.edu.unahur.obj2.practicaparcial1.Clientes.Cliente;
-
-public class Receta extends RecetaBase {
+public class Receta implements IReceta {
     private String nombre;
     private String autor;
-    private Integer valorNutricional;
-    private Integer aniosDeTradicion;
+    private Integer valorNutricionalBase;
+    private Integer añosDeTradicion;
 
-    public Receta(String nombre, String autor, Integer valorNutricional, Integer aniosDeTradicion) {
+    public Receta(String nombre, String autor, Integer valorNutricionalBase, Integer añosDeTradicion) {
+        if (añosDeTradicion < 0) {
+            throw new IllegalArgumentException("Los años no pueden ser menores a 0.");
+        }
         this.nombre = nombre;
         this.autor = autor;
-        this.valorNutricional = valorNutricional;
-        this.aniosDeTradicion = aniosDeTradicion;
+        this.valorNutricionalBase = valorNutricionalBase;
+        this.añosDeTradicion = añosDeTradicion;
     }
 
     @Override
     public String getNombre() {
         return nombre;
+    }
+    
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     @Override
@@ -25,17 +30,30 @@ public class Receta extends RecetaBase {
         return autor;
     }
 
-    @Override
-    public Integer getValorNutricional() {
-        return valorNutricional;
+    public void setAutor(String autor) {
+        this.autor = autor;
     }
 
     @Override
-    public Integer getAniosDeTradicion() {
-        return aniosDeTradicion;
+    public Integer getValorNutricionalBase() {
+        return valorNutricionalBase;
     }
 
-    public Boolean esAdecuada(Receta unaRecenta, Cliente unCliente) {
-        return unCliente.getCriterio().leGusta(unaRecenta);
+    public void setValorNutricionalBase(Integer valorNutricionalBase) {
+        this.valorNutricionalBase = valorNutricionalBase;
+    }
+
+    @Override
+    public Integer getAñosDeTradicion() {
+        return añosDeTradicion;
+    }
+
+    public void setAñosDeTradicion(Integer añosDeTradicion) {
+        this.añosDeTradicion = añosDeTradicion;
+    }
+
+    @Override
+    public Boolean esTradicional() {
+        return Boolean.valueOf(añosDeTradicion >= 20);
     }
 }
